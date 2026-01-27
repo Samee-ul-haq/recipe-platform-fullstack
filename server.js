@@ -9,7 +9,7 @@ app.use(express.json())
 app.get('/',(req,res)=>{
     res.send("Bookstore API is running! 📚")
 })
-app.use('/register',userRouter)
+app.use('/api',userRouter)
 
 const port=process.env.PORT || 3000
 app.listen(port,()=>{
