@@ -8,9 +8,8 @@ import { upload } from '../middleware/uploadMiddleware.js'
 
 const router=express.Router()
 
-router.post('/upload',verifyToken,uploadRecipe)
 router.get('/:id',getRecipeById)
 router.get('/',getAllRecipes)
-router.post('/',verifyToken,upload.single('image'),uploadRecipe)
+router.post('/upload',verifyToken,upload.single('image'),uploadRecipe)
 
 export default router

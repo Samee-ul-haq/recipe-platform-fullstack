@@ -30,8 +30,8 @@ function App() {
             {/* IMAGE HANDLING */}
             {recipe.image_url && (
               <img 
-                // We must add the backend URL because the DB only stores 'uploads/file.jpg'
-               src={`http://localhost:3000/${recipe.image_url.replace(/\\/g, "/")}`}
+                // We must add the backend URL because the DB only stores '/uploads/file.jpg'
+               src={`http://localhost:3000/${recipe.image_url.replace(/\\/g, "/").replace("/src","")}`}
                 alt={recipe.title}
                 style={{ width: '100%', height: '200px', objectFit: 'cover' }} 
               />
