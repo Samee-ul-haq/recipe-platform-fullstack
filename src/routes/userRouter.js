@@ -1,12 +1,16 @@
 import express from "express";
 import { loginUser, 
-    registerUser }
+    registerUser ,
+    uploadAvatar
+}
      from "../controllers/usercontroller.js";
-import {verifyToken} from '../middleware/authmiddleware.js';
+import { upload } from "../middleware/uploadMiddleware.js";
+import { verifyToken } from "../middleware/authmiddleware.js";
 
 const router=express.Router()
 
 router.post('/register',registerUser)
 router.post('/login',loginUser)
+router.post('/avatar',verifyToken,upload.single('avatar'))
 
 export default router

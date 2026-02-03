@@ -11,7 +11,8 @@ app.get('/',(req,res)=>{
     res.send("Bookstore API is running! 📚")
 })
 app.use('/api',userRouter)
-app.use('/recipe',recipeRouter)
+app.use('/api/recipes',recipeRouter)
+app.use('/uploads', express.static('uploads'));
 
 const port=process.env.PORT || 3000
 app.listen(port,()=>{

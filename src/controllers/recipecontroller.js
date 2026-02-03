@@ -4,6 +4,7 @@ export const uploadRecipe=async(req,res)=>{
     const connection=await db.getConnection()
     try {
      await connection.beginTransaction()
+     const imagePath = req.file ? req.file.path : null
         const {title,description,ingredients}=req.body
         
         if(!title)
@@ -12,12 +13,12 @@ export const uploadRecipe=async(req,res)=>{
 
         const sql1="INSERT INTO ingredients (name) VALUES (?)"
         const sql2="SELECT id FROM ingredients WHERE name=?"
-        const sql3="INSERT INTO recipes (title,description,user_id) VALUES (?,?,?)"
+        const sql3="INSERT INTO recipes (title,description,image_url,user_id) VALUES (?,?,?,?)"
         const sql4="INSERT INTO recipe_ingredients (recipe_id, ingredients_id, quantity) VALUES (?, ?, ?)"
 
        // console.log("Test 1",req.user.id)
 
-        const [result]=await connection.query(sql3,[title,description,req.user.id])
+        const [result]=await connection.query(sql3,[title,description,imagePath,req.user.id])
         const recipeID=result.insertId
 
         if(Array.isArray(ingredients) && ingredients.length>0){
@@ -74,6 +75,38 @@ export const getRecipeById=async(req,res)=>{
                 ...recipe, 
             ingredients: ingredientRows
             })
+        
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
+export const getAllRecipes=async(req,res)=>{
+    try {
+        const {search,chef,sort}=req.query
+        let sql="SELECT recipes.*,users.email as chef_email FROM recipes JOIN users ON recipes.user_id=users.id WHERE 1=1"
+        const params=[]
+
+        if(search){
+            sql+=" AND (recipes.title LIKE ? OR recipes.description LIKE ?)"
+            params.push(`%${search}%`,`%${search}%`)
+        }
+
+        if(chef){
+            sql+=" AND recipes.user_id=?"
+            params.push(chef)
+        }
+       if(sort==='oldest'){
+        sql+=" ORDER BY created_at ASC"
+       }
+       else{
+        sql+=" ORDER BY created_at DESC"
+       }
+       const connection=await db.getConnection()
+       const [rows]=await connection.query(sql,params)
+       connection.release()
+        
+       res.json(rows)
         
     } catch (error) {
         res.status(500).json({ error: error.message })

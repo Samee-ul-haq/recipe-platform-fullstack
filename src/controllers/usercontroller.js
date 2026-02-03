@@ -1,6 +1,7 @@
 import db from '../config/db.js'
 import bycrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import multer from 'multer'
 
 export const registerUser=async(req,res)=>{
     try {
@@ -52,6 +53,26 @@ export const loginUser=async(req,res)=>{
            return res.status(200).json({message:"logged in successfully",token})
         }
           return res.status(400).json({message:"Wrong password"})
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
+export const uploadAvatar=async(req,res)=>{
+    try {
+        if(!req.file)
+            return res.status(400).json({message:"No file uploaded"})
+
+        const imagePath=req.file.path
+        const userId=req.user.id
+
+        const sql="UPDATE users SET avatar=? WHERE id=?"
+        const [result]=await db.query(sql,[imagePath,userId])
+
+        res.json({
+            message:"Profile picture updated!",
+            avatar:imagePath
+        })
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
