@@ -20,7 +20,7 @@ app.get('/',(req,res)=>{
 })
 
 app.use('/api/recipes',recipeRouter)
-app.use('/api',userRouter)
+app.use('/api/auth',userRouter)
 app.use('/uploads', express.static(path.join(process.cwd(),'src','uploads')));
 
 const port=process.env.PORT || 3000

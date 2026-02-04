@@ -1,52 +1,31 @@
-import { useEffect, useState } from 'react';
-import api from './api';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Login from './pages/Login.jsx';
+import Feed from './pages/Feed.jsx'; 
+import CreateRecipe from './pages/createRecipes.jsx';
+import Profile from './pages/Profile.jsx';
 
-function App() {
-  const [recipes, setRecipes] = useState([]);
-
-  // 1. Fetch Data on Load
-  useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        const response = await api.get('/recipes');
-        setRecipes(response.data);
-      } catch (error) {
-        console.error("Error fetching recipes:", error);
-      }
-    };
-
-    fetchRecipes();
-  }, []);
-
+// 1. Create a simple "Navbar" so we can navigate
+function Navbar() {
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>🍲 Community Recipes</h1>
-      
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px' }}>
-        
-        {recipes.map((recipe) => (
-          <div key={recipe.id} style={{ border: '1px solid #ddd', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
-            
-            {/* IMAGE HANDLING */}
-            {recipe.image_url && (
-              <img 
-                // We must add the backend URL because the DB only stores '/uploads/file.jpg'
-               src={`http://localhost:3000/${recipe.image_url.replace(/\\/g, "/").replace("/src","")}`}
-                alt={recipe.title}
-                style={{ width: '100%', height: '200px', objectFit: 'cover' }} 
-              />
-            )}
-
-            <div style={{ padding: '15px' }}>
-              <h3>{recipe.title}</h3>
-              <p style={{ color: '#555' }}>{recipe.description}</p>
-              <small>Chef ID: {recipe.user_id}</small>
-            </div>
-          </div>
-        ))}
-
-      </div>
-    </div>
+    <nav style={{ padding: '15px', background: '#333', color: '#fff', marginBottom: '20px' }}>
+      <Link to="/" style={{ color: '#fff', marginRight: '20px' }}>Home</Link>
+      <Link to="/login" style={{ color: '#fff', marginRight: '20px' }}>Login</Link>
+      <Link to="/create" style={{ color: '#ffd700', fontWeight: 'bold',marginRight: '20px' }}>+ Upload Recipe</Link>
+      <Link to="/profile" style={{ color: '#ecece7', marginRight: '20px' }}>Profile</Link>
+    </nav>
+  );
+}
+function App() {
+  return (
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Feed />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/create" element={<CreateRecipe />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
+    </Router>
   );
 }
 

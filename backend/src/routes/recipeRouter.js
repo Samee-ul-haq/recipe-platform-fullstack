@@ -10,6 +10,6 @@ const router=express.Router()
 
 router.get('/:id',getRecipeById)
 router.get('/',getAllRecipes)
-router.post('/upload',verifyToken,upload.single('image'),uploadRecipe)
+router.post('/',verifyToken,upload.single('image'),uploadRecipe)
 
 export default router

@@ -50,7 +50,15 @@ export const loginUser=async(req,res)=>{
                 process.env.JWT_SECRET,
                 {expiresIn:'1h'}
             )
-           return res.status(200).json({message:"logged in successfully",token})
+           return res.status(200).json({
+            message:"logged in successfully",
+            token,
+            user:{
+                id:user.id,
+                email:user.email,
+                avatar:user.avatar
+            }
+            })
         }
           return res.status(400).json({message:"Wrong password"})
     } catch (error) {

@@ -11,6 +11,6 @@ const router=express.Router()
 
 router.post('/register',registerUser)
 router.post('/login',loginUser)
-router.post('/avatar',verifyToken,upload.single('avatar'))
+router.post('/avatar',verifyToken,upload.single('avatar'),uploadAvatar)
 
 export default router

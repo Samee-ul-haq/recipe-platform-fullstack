@@ -1,12 +1,20 @@
 import db from '../config/db.js'
 
 export const uploadRecipe=async(req,res)=>{
+    // console.log("----------------UPLOAD DEBUG----------------")
+    // console.log("1. Req.file:", req.file) 
+    // console.log("2. Req.body:", req.body)
+    // console.log("--------------------------------------------")
     const connection=await db.getConnection()
     try {
      await connection.beginTransaction()
      const imagePath = req.file ? req.file.path : null
-        const {title,description,ingredients}=req.body
-        
+        const {title,description}=req.body
+        let ingredients=req.body
+
+        if(typeof ingredients==='string'){
+        ingredients=[ingredients]
+        }
         if(!title)
             return res.status(400).json({message:"title can't be empty"})
 
