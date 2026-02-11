@@ -54,8 +54,6 @@ function Profile() {
     try {
       const token = localStorage.getItem('token');
       
-      // Make sure your backend route matches this! 
-      // If you put the route in userRouter, it's likely /avatar
       const res = await api.post('/auth/avatar', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
