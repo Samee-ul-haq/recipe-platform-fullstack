@@ -3,23 +3,54 @@ import api from '../api';
 
 function Feed() {
   const [recipes, setRecipes] = useState([]);
+  const [search,setSearch]=useState('')
+  const [chef,setChef]=useState('')
 
   // 1. Fetch Data on Load
-  useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await api.get('/recipes');
+        let url='/recipes'
+        if(search) 
+          url+=`?search=${search}`
+        if(chef)
+          url+=`?chef=${chef}`
+
+        const response = await api.get(url);
         setRecipes(response.data);
       } catch (error) {
         console.error("Error fetching recipes:", error);
       }
     };
-
+    // To make funtion accessible
+  useEffect(() => {
     fetchRecipes();
-  }, []);
+  }, [search,chef]);
   
   return (
+    
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+      <div className="search-bar">
+    <input 
+        type="text" 
+        placeholder="Search for recipes..." 
+        value={search}
+        onChange={(e) => setSearch(e.target.value)} 
+        
+    />
+    <button onClick={fetchRecipes}>Search</button>
+    </div>
+    <div>
+      <label>Select chefID</label>
+      <select
+       value={chef} 
+       onChange={(e)=> setChef(e.target.value)}>
+        <option value="">--Select ChefID</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+       </select>
+    </div>
       <h1>🍲 Community Recipes</h1>
       
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px' }}>
