@@ -23,7 +23,7 @@ app.use('/api/recipes',recipeRouter)
 app.use('/api/auth',userRouter)
 app.use('/uploads', express.static(path.join(process.cwd(),'src','uploads')));
 
-const port=process.env.PORT || 3000
+const port=process.env.DB_PORT || 3000
 app.listen(port,()=>{
     console.log(`Server running on port ${port}`)
 })
